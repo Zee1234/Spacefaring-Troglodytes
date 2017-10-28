@@ -70,6 +70,7 @@ module.exports = {
     colors: false, // Babel screws up the look of my command line. Known bug, not fixed. So work around it.
   },
 
+  devtool: 'source-map',
   entry: {
     game: path.resolve(__dirname, 'src','scripts','main.js')
   },
