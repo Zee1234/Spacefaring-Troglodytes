@@ -13,6 +13,7 @@
   "author": "Zee1234",
   "license": "MIT",
   "devDependencies": {
+    "awesome-typescript-loader": "^3.2.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
@@ -22,9 +23,14 @@
     "nib": "^1.1.2",
     "pug": "^2.0.0-rc.4",
     "pug-loader": "^2.3.0",
+    "source-map-loader": "^0.2.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
+    "tslint": "^5.8.0",
+    "tslint-loader": "^3.5.3",
+    "typescript": "^2.5.3",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"
-  }
+  },
+  "dependencies": {}
 }

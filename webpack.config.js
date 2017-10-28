@@ -35,22 +35,54 @@ rules.pug = {
   ]
 }
 
-rules.js = {
-  test: /\.(js|mjs)$/,
-  exclude: /(node_modules|bower_components)/,
-  use: {
-    loader: 'babel-loader',
-    options: {
-      presets: [
-        ['env', {
-          "targets": {
-            "browsers": ["last 2 versions", "safari >= 7"]
-          }
-        }],
-      ]
-    }
-  }
+rules.js_pre = {
+  enforce: 'pre',
+  test: /\.(js)$/,
+  use: [
+    { loader: 'source-map-loader' }
+  ],
+  exclude: /(node_modules)/
 }
+
+rules.js = {
+  test: /\.(js)$/,
+  exclude: /(node_modules|bower_components)/,
+  use: [
+    {
+      loader: 'babel-loader',
+      options: {
+        presets: [
+          ['env', {
+            "targets": {
+              "browsers": ["last 2 versions", "safari >= 7"]
+            }
+          }],
+        ]
+      }
+    }
+  ]
+}
+
+rules.ts_pre = {
+  enforce: 'pre',
+  test: /\.(ts)$/,
+  use: [
+    { loader: 'tslint-loader' }
+  ],
+  exclude: /(node_modules)/
+}
+
+rules.ts = {
+  test: /\.(ts)$/,
+  exclude: /(node_modules|bower_components)/,
+  use: [
+    {
+      loader: 'awesome-typescript-loader',
+    },
+  ]
+}
+
+
 
 rules.images = {
   test: /\.(png|jpg|gif)$/,
@@ -72,7 +104,7 @@ module.exports = {
 
   devtool: 'source-map',
   entry: {
-    game: path.resolve(__dirname, 'src','scripts','main.js')
+    game: path.resolve(__dirname, 'src','scripts','main.ts')
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -84,7 +116,10 @@ module.exports = {
     rules: [
       rules.stylus,
       rules.pug,
+      rules.js_pre,
       rules.js,
+      rules.ts_pre,
+      rules.ts,
       rules.images
     ],
   },
@@ -100,6 +135,8 @@ module.exports = {
     modules: [
       'node_modules',
       'src',
-    ]
+      '.'
+    ],
+    extensions: [ '.js', '.json', '.ts']
   }
 }

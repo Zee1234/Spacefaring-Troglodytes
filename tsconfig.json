@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "scripts": ["scr/scripts"]
+    },
+    "allowJs": true,
+    "alwaysStrict": true,
+    "checkJs": true,
+    "pretty": true,
+    "target": "es3"
+  },
+  "include": [
+      "src/**/*"
+  ],
+  "exclude": [
+      "node_modules",
+      "**/*.spec.ts"
+  ]
+}
