@@ -118,7 +118,7 @@ module.exports = {
       rules.pug,
       rules.js_pre,
       rules.js,
-      rules.ts_pre,
+      // rules.ts_pre,
       rules.ts,
       rules.images
     ],

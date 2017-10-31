@@ -3,14 +3,23 @@ import TwoWayMap from 'scripts/support/twowaymap'
 import Background from 'scripts/game/gameObjects/pieces/background'
 import Asteroid from 'scripts/game/gameObjects/pieces/asteroid'
 import Ship from 'scripts/game/gameObjects/pieces/ship'
+import GamePiece from 'scripts/game/gameObjects/gamepiece'
 
 export default class Game
 {
+  pieces
+  canvas: HTMLCanvasElement
+  context: CanvasRenderingContext2D
+  pressed: {[key: string]: boolean}
+  keys: TwoWayMap<string, number>
+  player: Ship
+  last: number
   constructor(canvas) {
     this.pieces = []
 
     this.canvas = canvas
     this.context = canvas.getContext('2d')
+    // this.context.scale(1000, 1000)
 
     this.pressed = {}
 
@@ -21,30 +30,32 @@ export default class Game
     this.keys.set('d', 68)
   }
 
-  addPieces() {
-    [...arguments].forEach( piece => this.pieces.push(piece) )
+  addPieces(...args: GamePiece[]) {
+    args.forEach( piece => this.pieces.push(piece) )
   }
 
   loadPieces() {
-    this.player = new Ship(20, 30, this.canvas, this.context)
+    this.player = new Ship(20, 30, this)
     this.addPieces(
-      new Background(this.canvas, this.context),
-      new Asteroid(20, 30, this.canvas, this.context),
+      new Background(this),
+      new Asteroid(20, 30, this),
       this.player
     )
   }
 
-  draw(t) {
+  draw(t?: number) {
 
     this.last = t
     this.move(t)
     this.canvas.width = window.innerWidth
+    this.canvas.style.width = window.innerWidth.toString()
     this.canvas.height = window.innerHeight
+    this.canvas.style.height = window.innerHeight.toString()
     this.pieces.forEach( piece => piece.draw())
     requestAnimationFrame(this.draw.bind(this))
   }
 
-  move(t) {
+  move(t: number) {
     if (this.pressed.w) {
       this.player.y -= 1
     }
@@ -59,7 +70,7 @@ export default class Game
     }
   }
 
-  newPlayer(player) {
+  newPlayer(player: Ship) {
     this.player = player
   }
 

@@ -1,10 +1,14 @@
-export default class TwoWayMap
+export default class TwoWayMap<A, B>
 {
+  keyValue: Map<A, B>
+  valueKey: Map<B, A>
+  set
+  get
   constructor() {
     this.valueKey = new Map()
     this.keyValue = new Map()
 
-    this.set = function(k, v) {
+    this.set = function(k: A, v: B) {
       if (this.keyValue.get(k) === v) {
         return;
       } else if (this.valueKey.get(v) !== undefined) {
@@ -22,14 +26,14 @@ export default class TwoWayMap
         return;
       }
     }
-    this.get = function(key) {
+    this.get = function(key: A & B) {
       return  this.keyValue.get(key) !== undefined && 
               this.keyValue.get(key) || 
               this.valueKey.get(key)
     }
   }
 
-  delete (k) {
+  delete (k: A & B) {
       if (this.keyValue.get(k)) {
         let other = this.keyValue.get(k)
         this.keyValue.delete(k)
@@ -41,17 +45,17 @@ export default class TwoWayMap
       }
       return undefined
     }
-  forEach() {
-    return this.keyValue.forEach()
+  forEach(cb: (value: B, key?: A, map?: Map<A, B>) => void, thisArg?: any) {
+    return this.keyValue.forEach(cb, thisArg)
   }
-  has(key) {
+  has(key: A & B) {
     return this.keyValue.has(key) || this.valueKey.has(key)
   }
   keys() {
     return this.keyValue.keys()
   }
   values() {
-    return this.valueKey.values()
+    return this.valueKey.keys()
   }
   entries() {
     return this.keyValue.entries()

@@ -65,49 +65,38 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scripts_structures_vector2d__ = __webpack_require__(5);
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var vector2d_1 = __webpack_require__(5);
-var GamePiece = /** @class */ (function (_super) {
-    __extends(GamePiece, _super);
-    function GamePiece(xOffset, yOffset, canvas, context) {
-        var _this = _super.call(this, xOffset, yOffset) || this;
-        _this.canvas = canvas;
-        _this.context = context;
-        return _this;
+class GamePiece extends __WEBPACK_IMPORTED_MODULE_0_scripts_structures_vector2d__["a" /* default */] {
+    constructor(xOffset, yOffset, game) {
+        super(xOffset, yOffset);
+        this.game = game;
+        this.canvas = game.canvas;
+        this.context = game.context;
     }
-    return GamePiece;
-}(vector2d_1["default"]));
-exports["default"] = GamePiece;
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = GamePiece;
+
 
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scripts_game_game__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_scripts_support_keys__ = __webpack_require__(9);
 
-exports.__esModule = true;
-var game_1 = __webpack_require__(2);
-var keys_1 = __webpack_require__(9);
-var canvas = document.getElementById('gameport');
-var board = new game_1["default"](canvas);
-var keybinder = new keys_1["default"]();
-var keydownRegisterNumber = keybinder.registerKeydown(board.keydown.bind(board));
-var keyupRegisterNumber = keybinder.registerKeyup(board.keyup.bind(board));
+
+const canvas = document.getElementById('gameport');
+const board = new __WEBPACK_IMPORTED_MODULE_0_scripts_game_game__["a" /* default */](canvas);
+const keybinder = new __WEBPACK_IMPORTED_MODULE_1_scripts_support_keys__["a" /* default */]();
+let keydownRegisterNumber = keybinder.registerKeydown(board.keydown.bind(board));
+let keyupRegisterNumber = keybinder.registerKeyup(board.keyup.bind(board));
 window.addEventListener('keydown', keybinder.keydownTrigger.bind(keybinder));
 window.addEventListener('keyup', keybinder.keyupTrigger.bind(keybinder));
 board.loadPieces();
@@ -116,44 +105,48 @@ board.draw();
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scripts_support_twowaymap__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_scripts_game_gameObjects_pieces_background__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_scripts_game_gameObjects_pieces_asteroid__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scripts_game_gameObjects_pieces_ship__ = __webpack_require__(8);
 
-exports.__esModule = true;
-var twowaymap_1 = __webpack_require__(3);
-var background_1 = __webpack_require__(4);
-var asteroid_1 = __webpack_require__(7);
-var ship_1 = __webpack_require__(8);
-var Game = /** @class */ (function () {
-    function Game(canvas) {
+
+
+
+class Game {
+    constructor(canvas) {
         this.pieces = [];
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
+        // this.context.scale(1000, 1000)
         this.pressed = {};
-        this.keys = new twowaymap_1["default"]();
+        this.keys = new __WEBPACK_IMPORTED_MODULE_0_scripts_support_twowaymap__["a" /* default */]();
         this.keys.set('w', 87);
         this.keys.set('a', 65);
         this.keys.set('s', 83);
         this.keys.set('d', 68);
     }
-    Game.prototype.addPieces = function () {
-        var _this = this;
-        arguments.slice().forEach(function (piece) { return _this.pieces.push(piece); });
-    };
-    Game.prototype.loadPieces = function () {
-        this.player = new ship_1["default"](20, 30, this.canvas, this.context);
-        this.addPieces(new background_1["default"](this.canvas, this.context), new asteroid_1["default"](20, 30, this.canvas, this.context), this.player);
-    };
-    Game.prototype.draw = function (t) {
+    addPieces(...args) {
+        args.forEach(piece => this.pieces.push(piece));
+    }
+    loadPieces() {
+        this.player = new __WEBPACK_IMPORTED_MODULE_3_scripts_game_gameObjects_pieces_ship__["a" /* default */](20, 30, this);
+        this.addPieces(new __WEBPACK_IMPORTED_MODULE_1_scripts_game_gameObjects_pieces_background__["a" /* default */](this), new __WEBPACK_IMPORTED_MODULE_2_scripts_game_gameObjects_pieces_asteroid__["a" /* default */](20, 30, this), this.player);
+    }
+    draw(t) {
         this.last = t;
         this.move(t);
         this.canvas.width = window.innerWidth;
+        this.canvas.style.width = window.innerWidth.toString();
         this.canvas.height = window.innerHeight;
-        this.pieces.forEach(function (piece) { return piece.draw(); });
+        this.canvas.style.height = window.innerHeight.toString();
+        this.pieces.forEach(piece => piece.draw());
         requestAnimationFrame(this.draw.bind(this));
-    };
-    Game.prototype.move = function (t) {
+    }
+    move(t) {
         if (this.pressed.w) {
             this.player.y -= 1;
         }
@@ -166,35 +159,33 @@ var Game = /** @class */ (function () {
         if (this.pressed.d) {
             this.player.x += 1;
         }
-    };
-    Game.prototype.newPlayer = function (player) {
+    }
+    newPlayer(player) {
         this.player = player;
-    };
+    }
     /// Define controls for the game, as well as handlers
-    Game.prototype.keydown = function (key, repeat, event) {
-        var code = this.keys.get(key);
+    keydown(key, repeat, event) {
+        let code = this.keys.get(key);
         if (code) {
             this.pressed[code] = true;
         }
-    };
-    Game.prototype.keyup = function (key, event) {
+    }
+    keyup(key, event) {
         this.pressed[this.keys.get(key)] = false;
-    };
-    return Game;
-}());
-exports["default"] = Game;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Game;
+
 //module.exports = Game 
 
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-exports.__esModule = true;
-var TwoWayMap = /** @class */ (function () {
-    function TwoWayMap() {
+class TwoWayMap {
+    constructor() {
         this.valueKey = new Map();
         this.keyValue = new Map();
         this.set = function (k, v) {
@@ -205,9 +196,9 @@ var TwoWayMap = /** @class */ (function () {
                 return new Error('`set` attempt would break 1:1 requirement of TwoWayMap');
             }
             else if (this.keyValue.get(k) !== undefined) {
-                var orig = this.keyValue.get(k);
-                this.valueKey["delete"](orig);
-                this.keyValue["delete"](k);
+                let orig = this.keyValue.get(k);
+                this.valueKey.delete(orig);
+                this.keyValue.delete(k);
                 this.keyValue.set(k, v);
                 this.valueKey.set(v, k);
                 return;
@@ -224,275 +215,220 @@ var TwoWayMap = /** @class */ (function () {
                 this.valueKey.get(key);
         };
     }
-    TwoWayMap.prototype["delete"] = function (k) {
+    delete(k) {
         if (this.keyValue.get(k)) {
-            var other = this.keyValue.get(k);
-            this.keyValue["delete"](k);
-            this.valueKey["delete"](other);
+            let other = this.keyValue.get(k);
+            this.keyValue.delete(k);
+            this.valueKey.delete(other);
         }
         else if (this.valueKey.get(k)) {
-            var other = this.valueKey.get(k);
-            this.valueKey["delete"](k);
-            this.keyValue["delete"](other);
+            let other = this.valueKey.get(k);
+            this.valueKey.delete(k);
+            this.keyValue.delete(other);
         }
         return undefined;
-    };
-    TwoWayMap.prototype.forEach = function () {
-        return this.keyValue.forEach();
-    };
-    TwoWayMap.prototype.has = function (key) {
+    }
+    forEach(cb, thisArg) {
+        return this.keyValue.forEach(cb, thisArg);
+    }
+    has(key) {
         return this.keyValue.has(key) || this.valueKey.has(key);
-    };
-    TwoWayMap.prototype.keys = function () {
+    }
+    keys() {
         return this.keyValue.keys();
-    };
-    TwoWayMap.prototype.values = function () {
-        return this.valueKey.values();
-    };
-    TwoWayMap.prototype.entries = function () {
+    }
+    values() {
+        return this.valueKey.keys();
+    }
+    entries() {
         return this.keyValue.entries();
-    };
-    TwoWayMap.prototype.clear = function () {
+    }
+    clear() {
         this.keyValue.clear();
         this.valueKey.clear();
         return true;
-    };
-    return TwoWayMap;
-}());
-exports["default"] = TwoWayMap;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TwoWayMap;
+
 
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scripts_game_gameObjects_gamepiece__ = __webpack_require__(0);
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var gamepiece_1 = __webpack_require__(0);
-var Background = /** @class */ (function (_super) {
-    __extends(Background, _super);
-    function Background(canvas, context) {
-        return _super.call(this, 0, 0, canvas, context) || this;
+class Background extends __WEBPACK_IMPORTED_MODULE_0_scripts_game_gameObjects_gamepiece__["a" /* default */] {
+    constructor(game) {
+        super(0, 0, game);
+        let width = this.canvas.width;
+        let height = this.canvas.height;
+        this.image = this.context.createImageData(width, height);
+        let arr = [];
+        for (let i = 0; i < width; i += 4) {
+            let num = !!((i / 4) % 2) ? 0 : 255;
+            this.image.data[i] = num;
+            this.image.data[i + 1] = num;
+            this.image.data[i + 2] = num;
+            this.image.data[i + 4] = 255;
+        }
     }
-    Background.prototype.draw = function (xOffset, yOffset) {
-        var ctx = this.context;
-        ctx.fillStyle = 'rgb(255, 255, 255, 1)';
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    };
-    return Background;
-}(gamepiece_1["default"]));
-exports["default"] = Background;
+    draw() {
+        let ctx = this.context;
+        ctx.putImageData(this.image, this.canvas.width, this.canvas.height);
+        // let doot = [...new Array(this.canvas.width)].forEach( (_, x) => {
+        //   return [...new Array(this.canvas.height)].forEach( (_, y) => {
+        //     let color = (1-Math.pow(-1, x+y)) ? '255, 0, 0' : '255, 255, 255'
+        //     ctx.fillStyle = `rgba(${color}, 1)`
+        //     ctx.fillRect(x, y, 1, 1)
+        //   })
+        // })
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Background;
+
 
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scripts_structures_nvector__ = __webpack_require__(6);
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var nvector_1 = __webpack_require__(6);
-var Vector2D = /** @class */ (function (_super) {
-    __extends(Vector2D, _super);
-    function Vector2D(x, y) {
-        var _this = this;
-        if (typeof x !== 'number' || typeof y !== 'number') {
-            throw new Error('Attempt to construct Vector2D with non-number arguments');
-        }
-        _this = _super.call(this, x, y) || this;
-        return _this;
+class Vector2D extends __WEBPACK_IMPORTED_MODULE_0_scripts_structures_nvector__["a" /* default */] {
+    constructor(x, y) {
+        super(x, y);
     }
-    return Vector2D;
-}(nvector_1["default"]));
-exports["default"] = Vector2D;
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Vector2D;
+
 
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-exports.__esModule = true;
-var NVector = /** @class */ (function () {
-    function NVector() {
-        var _this = this;
-        arguments.slice().forEach(function (value, index) {
-            _this[index] = value;
-        });
+class NVector extends Array {
+    constructor(...args) {
+        super();
+        args.forEach((value) => this.push(value));
     }
-    Object.defineProperty(NVector.prototype, "x", {
-        get: function () {
-            return this[0];
-        },
-        set: function (v) {
-            this[0] = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(NVector.prototype, "y", {
-        get: function () {
-            return this[1];
-        },
-        set: function (v) {
-            this[1] = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(NVector.prototype, "z", {
-        get: function () {
-            return this[2];
-        },
-        set: function (v) {
-            this[2] = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return NVector;
-}());
-exports["default"] = NVector;
+    get x() {
+        return this[0];
+    }
+    set x(v) {
+        this[0] = v;
+    }
+    get y() {
+        return this[1];
+    }
+    set y(v) {
+        this[1] = v;
+    }
+    get z() {
+        return this[2];
+    }
+    set z(v) {
+        this[2] = v;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = NVector;
+
 
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scripts_game_gameObjects_gamepiece__ = __webpack_require__(0);
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var gamepiece_1 = __webpack_require__(0);
-var Asteroid = /** @class */ (function (_super) {
-    __extends(Asteroid, _super);
-    function Asteroid(x, y, canvas, context) {
-        return _super.call(this, x, y, canvas, context) || this;
+class Asteroid extends __WEBPACK_IMPORTED_MODULE_0_scripts_game_gameObjects_gamepiece__["a" /* default */] {
+    constructor(x, y, game) {
+        super(x, y, game);
     }
-    Asteroid.prototype.draw = function (xOffset, yOffset) {
-        var ctx = this.context;
+    draw() {
+        let ctx = this.context;
         ctx.fillStyle = 'rgba(255, 0, 0, 1)';
         ctx.beginPath();
         ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
         ctx.fill();
-    };
-    return Asteroid;
-}(gamepiece_1["default"]));
-exports["default"] = Asteroid;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Asteroid;
+
 
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scripts_game_gameObjects_gamepiece__ = __webpack_require__(0);
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var gamepiece_1 = __webpack_require__(0);
-var Asteroid = /** @class */ (function (_super) {
-    __extends(Asteroid, _super);
-    function Asteroid(x, y, canvas, context) {
-        return _super.call(this, x, y, canvas, context) || this;
+class Asteroid extends __WEBPACK_IMPORTED_MODULE_0_scripts_game_gameObjects_gamepiece__["a" /* default */] {
+    constructor(x, y, game) {
+        super(x, y, game);
     }
-    Asteroid.prototype.draw = function (xOffset, yOffset) {
-        var ctx = this.context;
+    draw() {
+        let ctx = this.context;
         ctx.fillStyle = 'rgba(0, 0, 255, 1)';
         ctx.beginPath();
         ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
         ctx.fill();
-    };
-    return Asteroid;
-}(gamepiece_1["default"]));
-exports["default"] = Asteroid;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Asteroid;
+
 
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-exports.__esModule = true;
-var Keys = /** @class */ (function () {
-    function Keys() {
+class Keys {
+    constructor() {
         this.down = {};
         this.downFuncs = new Map(); // Functions to call on keydown
         this.upFuncs = new Map(); // Functions to call on keyup
     }
-    Keys.prototype.keydownTrigger = function (event) {
-        var _this = this;
-        this.downFuncs.forEach(function (func) {
-            func(event.keyCode, _this.down[event.keyCode] || false, event);
+    keydownTrigger(event) {
+        this.downFuncs.forEach(func => {
+            func(event.keyCode, this.down[event.keyCode] || false, event);
         });
         this.down[event.keyCode] = true;
-    };
-    Keys.prototype.keyupTrigger = function (event) {
+    }
+    keyupTrigger(event) {
         console.log(event.keyCode);
-        this.upFuncs.forEach(function (func) {
+        this.upFuncs.forEach(func => {
             func(event.keyCode, event);
         });
         this.down[event.keyCode] = false;
-    };
-    Keys.prototype.registerKeydown = function (callback) {
-        var s = this.downFuncs.size;
+    }
+    registerKeydown(callback) {
+        let s = this.downFuncs.size;
         this.downFuncs.set(s, callback);
         return s;
-    };
-    Keys.prototype.registerKeyup = function (callback) {
-        var s = this.upFuncs.size;
+    }
+    registerKeyup(callback) {
+        let s = this.upFuncs.size;
         this.upFuncs.set(s, callback);
         return s;
-    };
-    Keys.prototype.deleteKeydown = function (num) {
-        return this.downFuncs["delete"](num);
-    };
-    Keys.prototype.deleteKeyup = function (num) {
-        return this.upFuncs["delete"](num);
-    };
-    return Keys;
-}());
-exports["default"] = Keys;
+    }
+    deleteKeydown(num) {
+        return this.downFuncs.delete(num);
+    }
+    deleteKeyup(num) {
+        return this.upFuncs.delete(num);
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Keys;
+
 
 
 /***/ })

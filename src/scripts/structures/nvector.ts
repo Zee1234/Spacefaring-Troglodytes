@@ -1,9 +1,8 @@
-export default class NVector
+export default class NVector<A> extends Array<A>
 {
-  constructor() {
-    [...arguments].forEach( (value, index) => {
-      this[index] = value
-    })
+  constructor(...args: A[]) {
+    super()
+    args.forEach( (value) => this.push(value))
   }
 
   get x() {
@@ -26,4 +25,10 @@ export default class NVector
   set z(v) {
     this[2] = v
   }
+
+  // forEach(func: (value: A, index?: number, matrix?: NVector<A>) => void, thisVar?: any) {
+  //   for (let i = 0; i < this.length; i++) {
+  //     func.call(thisVar !== undefined ? thisVar : this, this[i], i, this)
+  //   }
+  // }
 }

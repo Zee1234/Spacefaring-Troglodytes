@@ -1,5 +1,8 @@
 export default class Keys
 {
+  down
+  downFuncs
+  upFuncs
   constructor() {
     this.down = {}
     this.downFuncs = new Map() // Functions to call on keydown

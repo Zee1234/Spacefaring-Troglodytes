@@ -1,10 +1,13 @@
 import Vector2D from 'scripts/structures/vector2d'
+import Game from 'scripts/game/game'
 
 export default class GamePiece extends Vector2D
 {
-  constructor(xOffset, yOffset, canvas, context) {
+  canvas: HTMLCanvasElement
+  context: CanvasRenderingContext2D
+  constructor(xOffset: number, yOffset: number, public game: Game) {
     super(xOffset, yOffset)
-    this.canvas = canvas
-    this.context = context
+    this.canvas = game.canvas
+    this.context = game.context
   }
 }
